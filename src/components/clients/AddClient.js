@@ -6,6 +6,10 @@ import PropTypes from "prop-types";
 import { firestoreConnect } from "react-redux-firebase";
 
 class AddClient extends Component {
+  static propTypes = {
+    firestore: PropTypes.object.isRequired
+  };
+
   state = {
     firstName: "",
     lastName: "",
@@ -15,6 +19,19 @@ class AddClient extends Component {
   };
 
   onChange = e => this.setState({ [e.target.name]: e.target.value });
+
+  onSubmit = e => {
+    e.preventDefault();
+    const newClient = this.state;
+
+    const { firestore, history } = this.props;
+    if (newClient.balance === "") {
+      newClient.balance = 0;
+    }
+    firestore
+      .add({ collection: "clients" }, newClient)
+      .then(() => history.push("/"));
+  };
 
   render() {
     return (
@@ -29,7 +46,7 @@ class AddClient extends Component {
         <div className="card">
           <div className="card-header">Add Client</div>
           <div className="card-body">
-            <form>
+            <form onSubmit={this.onSubmit}>
               <div className="form-group">
                 <label htmlFor="firstName">First Name</label>
                 <input
