@@ -14,7 +14,7 @@ class Login extends Component {
 
   onSubmit = e => {
     e.preventDefault();
-    const { firebase, history } = this.props;
+    const { firebase } = this.props;
     const { email, password } = this.state;
     firebase
       .login({
